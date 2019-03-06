@@ -4,12 +4,12 @@ Projekt detekce anomálií v datech o znečištění ovzduší ze sensorické s�
 
 ## Harmonogram
 
-- 11. březen: zvolení tématu (data, metody, nástroje, vstupy, výstupy)
-- 25. březen: první prototyp
-- 8. duben: druhý prototyp
-- 19. duben: třetí prototyp
-- 6. květen: předfinální práce
-- 13. květen: finální práce (prezentace, funkční kód, dokumentace, příklady)
+11. březen: zvolení tématu (data, metody, nástroje, vstupy, výstupy)
+25. březen: první prototyp
+8. duben: druhý prototyp
+19. duben: třetí prototyp
+6. květen: předfinální práce
+13. květen: finální práce (prezentace, funkční kód, dokumentace, příklady)
 
 ## Data
 
