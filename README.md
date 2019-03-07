@@ -33,8 +33,18 @@ Protože data neobsahují žádná označení dřívějších anomalií, je tře
 
 ## Nástroje
 
-Programovací jazyk Python a jeho knihovny.
+Programovací jazyk Python, jeho knihovny a Jupyter Notebook.
 
 ## Výstupy
 
-Výstupy projektu jsou natrénovaný algoritmus pro detekci anomálií v datech o znečištění životního prostředí z chytrých lamp v okolí Karlínského náměstí a script nebo webové rozhraní online detekující anomálie online v aktuální datec API (případně algoritmus, který se z nich online také učí).
+Výstupem projektu jsou následující body:
+
+1. natrénovaný algoritmus pro detekci anomálií,
+2. vizualizace pro potřeby prezentace výsledků a
+3. Jupyter notebooky s eplorací a analýzou dat.
+
+Další potenciální cíle projektu jsou:
+
+1. vytvoření webového rozhraní,
+2. srovnání dat o znečištění ovzduší z lamp s daty ČHMU (znečištění a počasí) a
+3. analýza rozmístění sensorů (korelace jednotlivých časových řad).
