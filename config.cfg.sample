@@ -1,0 +1,5 @@
+[golemio]
+client_id = YOUR_CLIENT_ID
+client_secret = YOUR_CLIENT_SECRET
+username_with_domain = YOUR_USERNAME@prague-city.com
+password = YOUR_PASSWORD
