@@ -1,6 +1,12 @@
+# Data
 /data/*
 !/data/README.md
+
+# References
 /clanky/
+
+# Configuration file
+config.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
