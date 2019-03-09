@@ -27,7 +27,7 @@ Datové zdroje z pilotního projektu v Karlíně jsou historická data polutant�
 
 ## Metody
 
-Při detekování anomálií v časových řadách se používá metoda, kdy je daná řada předpověděna dopředu (například pomocí rekurentní neuronové sítě) a následně je porovnána se skutečnými daty z nehož jsou určeny anomálie (například pomocí váhování). Tímto přístupem se zabývá článek [Time Series Anomaly Detection](https://static.googleusercontent.com/media/research.google.com/cs//pubs/archive/dfd834facc9460163438b94d53b36f51bb5ea952.pdf). Dalším vhodným materiálem k prostudování je přehled algoritmů na detekci anomálií [Anomaly Detection: A Survey](http://cucis.ece.northwestern.edu/projects/DMS/publications/AnomalyDetection.pdf).
+Při detekování anomálií v časových řadách se používá metoda, kdy je daná řada předpověděna dopředu (například pomocí rekurentní neuronové sítě) a následně je porovnána se skutečnými daty z nehož jsou určeny anomálie (například pomocí váhování). Tímto přístupem se zabývá článek [Time Series Anomaly Detection](https://static.googleusercontent.com/media/research.google.com/cs//pubs/archive/dfd834facc9460163438b94d53b36f51bb5ea952.pdf). Dalším vhodným materiálem k prostudování je přehled algoritmů na detekci anomálií [Anomaly Detection: A Survey](http://cucis.ece.northwestern.edu/projects/DMS/publications/AnomalyDetection.pdf).
 
 Protože data neobsahují žádná označení dřívějších anomalií, je třeba použít strojové učení bez učitele.
 
