@@ -1,6 +1,8 @@
 import click
 from configparser import ConfigParser
+from functools import partial
 from oauthlib.oauth2 import LegacyApplicationClient
+from requests import Session
 from requests_oauthlib import OAuth2Session
 import sys
 
@@ -55,10 +57,28 @@ def get_access_token(cfg):
             client_id=client_id,
             client_secret=client_secret
             )
-    return token
+    return token['access_token']
+
+
+def token_auth(req, token):
+    """Token authorization handler."""
+    req.headers['Authorization'] = 'Bearer ' + token
+    return req
 
 
 if __name__ == '__main__':
+    from pprint import pprint
+    # parse config
     cfg = parse_config('config.cfg')
-    token = get_access_token(cfg)
-    print(token)
+    # setup session
+    session = Session()
+    access_token = get_access_token(cfg)
+    session.auth = partial(token_auth, token=access_token)
+    # prepare request
+    body = {'Query': {'Find': {'EnvironmentData': {'sid': {'ne': ' '}}}}}
+    response = session.post(
+            'https://ckc-emea.cisco.com/t/prague-city.com/cdp/v1/devices',
+            json=body
+            )
+    print(response)
+    pprint(response.json())
