@@ -41,7 +41,7 @@ Výstupem projektu jsou následující body:
 
 1. natrénovaný algoritmus pro detekci anomálií,
 2. vizualizace pro potřeby prezentace výsledků a
-3. Jupyter notebooky s eplorací a analýzou dat.
+3. Jupyter notebooky s explorací a analýzou dat.
 
 Další potenciální cíle projektu jsou:
 
