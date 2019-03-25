@@ -4,6 +4,9 @@ import torch.nn as nn
 class BaselineModel(nn.Module):
     """Baseline model predict the next value to be the same as previous
     value."""
+    def __init__(self):
+        super(BaselineModel, self).__init__()
+
     def forward(self, x):
         # x is the previous value in a time serie and the predicted value
         # in the baseline model is the same
