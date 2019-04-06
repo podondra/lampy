@@ -23,4 +23,4 @@ def create_dataset(df, target='pm10'):
 
 
 def train_validation_split(X, y):
-    return train_test_split(X, y, shuffle=False)
+    return train_test_split(X, y, test_size=0.5, shuffle=False)
