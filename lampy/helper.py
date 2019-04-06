@@ -1,4 +1,3 @@
-import click
 from configparser import ConfigParser
 from functools import partial
 from oauthlib.oauth2 import LegacyApplicationClient
@@ -36,7 +35,7 @@ def get_from_cfg(cfg, what, err_code):
     try:
         value = cfg['golemio'][what]
     except KeyError:
-        click.echo('No {} has been provided'.format(what), err=True)
+        print('No {} has been provided'.format(what), file=sys.stderr)
         sys.exit(err_code)
     return value
 
