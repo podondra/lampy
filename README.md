@@ -106,5 +106,5 @@ Další potenciální cíle projektu jsou:
 [mse]: https://en.wikipedia.org/wiki/Mean_squared_error
 [pevne_castice]: https://cs.wikipedia.org/wiki/Pevn%C3%A9_%C4%8D%C3%A1stice
 [rnn_effectiveness]: http://karpathy.github.io/2015/05/21/rnn-effectiveness/
-[senzoricka_sit_verejneho_osvetleni]: https://en.wikipedia.org/wiki/Confusion_matrix
+[senzoricka_sit_verejneho_osvetleni]: https://golemio.cz/cs/node/622
 [time_series_anomaly_detection]: https://static.googleusercontent.com/media/research.google.com/cs//pubs/archive/dfd834facc9460163438b94d53b36f51bb5ea952.pdf
