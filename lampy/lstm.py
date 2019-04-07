@@ -27,7 +27,7 @@ class LSTM(nn.Module):
             y_pred, _ = self.forward(tensor, hidden=None)
         return y_pred.numpy()
 
-    def train(self, X, y, X_val, y_val, n_epochs, seq_len):
+    def train(self, X, y, X_val, y_val, n_epochs, seq_len, verbose=True):
         dataset = TensorDataset(self.to_tensor(X), self.to_tensor(y))
         loader = DataLoader(dataset, batch_size=seq_len, shuffle=False)
         X_val, y_val = self.to_tensor(X_val), self.to_tensor(y_val)
@@ -59,7 +59,8 @@ class LSTM(nn.Module):
 
             tr_losses.append(tr_loss / X.shape[0])
             val_losses.append(val_loss / X_val.shape[0])
-            print('epoch: {} train loss: {} validation loss: {}'.format(
-                epoch, tr_losses[-1], val_losses[-1]))
+            if verbose:
+                print('epoch: {} train loss: {} validation loss: {}'.format(
+                      epoch, tr_losses[-1], val_losses[-1]))
 
         return {'tr_losses': tr_losses, 'val_losses': val_losses}
