@@ -1,10 +1,15 @@
 <!doctype html>
 <meta charset="utf-8">
 <script src="https://distill.pub/template.v1.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
 <script type="text/front-matter">
-    title: "lampy"
-    description: "Detekce anomálií v datech o znečištění ze sensorické sítě veřejného osvětlení"
+    title: "Detekce anomálií v datech o znečištění ovzduší"
+    description: "Chytré lampy na Karlínském náměstí poskytují data o znečištění ovzduší. V této práci v nich detekujeme anomálie v polétavém prachu."
     authors:
     - Ondřej Podsztavek: https://podondra.cz
     affiliations:
@@ -12,21 +17,105 @@
 </script>
 
 <dt-article>
-    <h1>lampy</h1>
-    <h2>Detekce anomálií v datech o znečištění ze sensorické sítě veřejného osvětlení</h2>
+    <h1>Detekce anomálií v datech o znečištění ovzduší</h1>
+
+    <p>Chytré lampy na Karlínském náměstí poskytují data o znečištění ovzduší. V této práci v nich detekujeme anomálie v polétavém prachu.</p>
+
     <dt-byline></dt-byline>
-    <p>This is the first paragraph of the article.<dt-fn>This will become a hoverable footnote.</dt-fn></p>
-    <p>We can also cite <dt-cite key="gregor2015draw"></dt-cite> external publications.</p>
-    <dt-code block language="python">
-        x = 25
-        def square(x):
-            return x * x
-    </dt-code>
+
+    <h2>Explorace</h2>
+
+    <h3>Datové zdroje</h3>
+
+    <p>V <a href="https://golemio.cz/cs/node/622">katalogu datové platformy Golemio</a> jsou k dispozici dva datové CSV soubory: jeden za druhé pololetí roku 2018 a druhý za zatím uplynulou část prvního pololetí roku 2019. Data z druhé poloviny obsahují celkem 473529 záznamů z toho jsou ale dostupné odečty PM<sub>10</sub> pouze v 129807 případech. V soubory z roku 2019 je zatím celkem 226672 záznamů a z toho 62518 měření PM<sub>10</sub>.</p>
+    <p>Každý záznam se skládá z následujích atributů:</p>
+    <ul>
+        <li>sid (string): identifikátor stanice;</li>
+        <li>starttimestamp` (datetime): datum a čas měření,</li>
+        <li>o3 (integer with precision): atribut O<sub>3</sub> (ozon, ppb),</li>
+        <li>no2 (integer with precision): atribut NO<sub>2</sub> (oxid dusičitý, ppb),</li>
+        <li>so2 (integer with precision): atribut SO<sub>2</sub> (oxid siřičitý, ppb),</li>
+        <li>pm10 (integer with precision): atribut jemné částice PM<sub>10</sub> (µg m<sup>-3</sup>),</li>
+        <li>pm2p5 (integer with precision): atribut jemné částice PM<sub>2,5</sub> (µg m<sup>-3</sup>),</li>
+        <li>geocoordinates_latitude (integer with precision): zeměpisná šířka stanice,</li>
+        <li>geocoordinates_longitude (integer with precision): zeměpisná délka stanice,</li>
+    </ul>
+    <p>kde ppb znamená <a href="https://en.wikipedia.org/wiki/Parts-per_notation">parts per bilion</a>. Datová sada by měla obsahovat odečty z 43 senzorů, které jsou rozmístěny na vybraných lampách, ale ve skutečnosti jsou k dispozici data pouze z 22 senzorů.</p>
+    <p>Ze 22 senzorů měří podle dostupných dat polétavý prach PM<sub>10</sub> pouze 6 senzorů z nich nejvíce měření má stanice s identifikátorem: y7e4onsytkb3ydonflz5kcbcigkh5ulo.</p>
+
+    <h3>Trénovací a testovací data</h3>
+
+    <p>Vezmeme-li si pouze data z této lampy a ponecháme si atributy o3, pm2p5, no2, so2 a pm10, tak dostaneme data dimenze 5, kterí obsahují 32872 záznamů v roce 2018 a 12709 záznamů v roce 2019, a to je dohromady 45581 záznamů za oba roky. Protože pracujeme s časovou řadou jako index zachováme datum a čas měření tedy `starttimestamp`.</p>
+    <p>Dále se přímo nabízí rozdělit data na trénovací a testovací množinu podle roku měření tj. podle souborů. Takové rozdělení má 72,1% dat v trénovací množině a 27,9% dat v množině testovací.</p>
+
+    <h3>Vizualizace</h3>
+
+    <p>Základní vizualizace časové řady ukazuje, že v datech o polétavém prachu opravdu nějaké anomálie jsou. Dále je vidět, že data na první pohled neobsahují žádné známky sezóního chování.</p>
+    <p>Boxplot ukazuje že z hlediska absolutní velikosti hodnoty PM<sub>10</sub> mnoho bodů vybočuje od průměru 14.093698, který má relativně malou standarní odchylku 18.931824. Samozřejmě všechny tyto body nemusí být anomálie, protože naše detekce je časově závislá a záleží na předchozích měřeních.</p>
+    <p>Jistou lineární závislost naznačuje tak zvaný <i>lag plot</i>, který zobrazuje závíslost měření na měřením předchozím, body se totiž shormaždují na diagonále. I zde je vidět zhruba 6 anomálních měření, která leží mimo diagonálu.</p>
+    <p>Poslední vizualizační pomůckou, kterou prozkoumáváme data je korelační graf. Zajímá nás především korelace příznaku `pm10` s ostaními. Za povšimnutí stojí, že anomálie PM<sub>10</sub> se vyskutují pouze pokud je nízká hladina SO<sub>2</sub> a O<sub>3</sub>.</p>
+
+    <p>Každopádně tento vztah zřejmě není lineární, protože korelační koeficient je v obou případech blízký nule (0.028117 resp. -0.067698) v porovnání s největším korelační koeficient, který má s příznakem `pm2p5`, a to 0.530632. Z korelačního grafu PM<sub>10</sub> a PM<sub>2,5</sub> je ale vidět, že nekteré anomáli nastávají jak při zvyšené hladině PM<sub>2,5</sub> tak při jejím normálním stavu.</p>
+
+    <h3>Rozdíl časů odečtů</h3>
+
+    <p>Podle specifikace je vyčítací frekvence 15 minut z brány do platformy. Naše data takovéto pravidelné intervaly neobsahují. Průměrně je dostupné nové měření asi každých 7 minut a 52 sekund se standarní odchylkou zhruba 18 minut a 20 sekund.</p>
+    <p>Zřejmé výpadky ale mohou systém odstavit i na delší dobu. V našich datech je nejdelší prodleva přes 1 den a 15 hodin.</p>
+
+    <h3>Log–log plot</h3>
+
+    <p>Poslední vizualizační pomůckou, která nám pomůže nahlédnou do dat z hlediska jejich absolutní velikosti je tzv. log–log graf. Především v jeho pravé dolní části je vidět, že data obsahují něktré abnormálně velké hodnoty a bude úkolem námi naučených klasifikátorů tyto hodnoty najít i vzhledem k časové závislosti na bodech předchozích.</p>
+
+    <h2>Předzpracování</h2>
+
+    <p>Původní data tedy nejsou samplovány v rovnoměrných intervalech, a proto je v rámci předzpracování přesamplujeme na každých 15 minut, což je vyčítací frekvence z platformy a k doplnění chybějících hodnot použijeme metodu *fill forward*, která doplní vždy předchozí hodnotu.</p>
+
+    <p>Data musí přetransformovat do podoby vhodné pro předpovídání časových řad, abychom potom mohli detekovat anomálie. To znamená že z měření v čase \(t\) se budeme snažit předpovědět hodnotu `pm10` v čase \(t + 1\).</p>
+
+    <p>Poté data rozdělíme na trénovací a validační množinu. Validační množina nám poslouží k výběru modelu a jeho hyperparametrů. Konzervativně jsem se rozhodnul, že data rozdělím na půlky tak, aby odhad byl co nejpřesnější.</p>
+
+    <p>Nakonec aby různé příznaky byly zhruba stejných rozsahů použijeme standadrní škálování, takže každý příznak má trénovací množiny bude mít nulový průměr a jenotkovou standardní odchylku. Takto předzpracovaná data nám umožní i správnou selekci příznaků pomocí linearní regrese s L1 regularizací.</p>
+
+    <h2>Porovnání modelů</h2>
+
+    <p>Problém je definovám tak, že předpovíme pomocí nějakého algoritmu strojové učení následují hodnotu, která by měla následovat po jich zaznamenaných měření. Předpovězenou hodnotu potom porovnáme s naměřenou hodnotou a pokud se tyto hodnoty nepřirozeně liší, tak měření označíme jako anomálii.</p>
+    <p>Jako vhodné algoritmy jsem zvolil tři základní:</p>
+    <ul>
+        <li>základní model, který předpokládá že následující hodnota měření bude stejná jako přechozí,</li>
+        <li>lineární regresní model a</li>
+        <li>rekurentní neuronovou síť (konkrétně dnes nejpopulárnější Long Short-Term Memory).</li>
+    </ul>
+    <p>Abych mohl modely mezi sebou porovnávat je potřeba zvolit nějakou metriku. Pro regresní problémy je nejpřirozenější odmocnina ze střední kvadratické chyby:</p>
+    <p>\(\mathrm{RMSE} = \sqrt{\frac{1}{N} \sum^{N}_{i = 1}(\hat{y_i} - y_i)^2},\)</p>
+    <p>kde \(N\) je počet měření, \(\hat{y_i}\) je predikce modelu a \(y_i\) je skutečně naměřená hodnota.</p>
+
+    <h3>Základní model</h3>
+
+    <p>Základní model nám poskytny odrazový můstek, ke kterému budeme moci vztahovat výsledky ostatních modelů. Navíc je jednoduchý na implementaci a dosahuje výsledku vypsaného níže.</p>
+
+    <h3>Linearní regrese</h3>
+
+    <p>Druhým modelem je linearní regrese a nyní už bez regularizace, protože nám zůstal pouze jeden příznak. Pokud necháme tento model předpovídat pouze z bezprostředně předcházející hodnoty dostaneme RMSE viz níže.</p>
+    <p>Můžeme ale také nechat linearní regresi předpovídat z hodnot větší historie. Graf níže ukazuje výsledek pro velikosti hisotrie 1 až 100. Jako nejlepší se ukazuje velikost historie hodnoty 2, kde je RMSE rovna 0.63797. Následně se RMSE zhorší a poté konverguje k hodnotě zhruba 0,71.</p>
+
+    <h3>Long Short-Term Memory (LSTM) rekurentní neuronová síť</h3>
+
+    <p>Poslední a nejkomplexnější model je <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">LSTM</a><dt-cite key="hochreiter1997lstm"></dt-cite>, který dokáže zachytit i nelineární vztahy v datech, a proto vstupu tohoto modelu všechny příznaky.</p>
+    <p>Jako architekturu jsou zvolil jednovrstvout rekuretní síť s velikostí skrytého stavu 64. Výstupem ale musí být pouze jedno číslo které predikuje měření PM<sub>10</sub>. Proto je na vlastní buňce LSTM ještě linearní vrstva, která produkuje onu jednu výstupní hodnotu.</p>
+    <p>Co se týče trénování, LSTM jsem trénoval na sekvencích délky 100 a celkem 50 epoch. Výsledné RMSE na validační setu viz níže.</p>
+
+    <h3>Výsledky</h3>
+
+    <p>Níže jsou porovnány RMSE všech čtyř různých přístupů k předpovědi časové řady na validačním setu a jako nejlepší možnost se tedy jeví lineární regrese.</p>
+
+    <h2>Detekce anomálií</h2>
+
+    <h2>Testování</h2>
+
+    <h2>Závěr</h2>
 </dt-article>
 
 <dt-appendix>
-    <h3>Appendix Section Title</h3>
-    <p>section content<p>
 </dt-appendix>
 
 <script type="text/bibliography">
@@ -36,5 +125,24 @@
     journal={arXivreprint arXiv:1502.04623},
     year={2015},
     url={https://arxiv.org/pdf/1502.04623.pdf}
+  }
+  
+  @article{hochreiter1997lstm,
+    author = {Hochreiter, Sepp and Schmidhuber, Jürgen},
+    title = {Long Short-Term Memory},
+    journal = {Neural Comput.},
+    issue_date = {November 15, 1997},
+    volume = {9},
+    number = {8},
+    month = nov,
+    year = {1997},
+    issn = {0899-7667},
+    pages = {1735--1780},
+    numpages = {46},
+    url = {http://dx.doi.org/10.1162/neco.1997.9.8.1735},
+    doi = {10.1162/neco.1997.9.8.1735},
+    acmid = {1246450},
+    publisher = {MIT Press},
+    address = {Cambridge, MA, USA},
   }
 </script>
