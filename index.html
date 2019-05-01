@@ -51,30 +51,63 @@
     <h3>Vizualizace</h3>
 
     <p>Základní vizualizace časové řady ukazuje, že v datech o polétavém prachu opravdu nějaké anomálie jsou. Dále je vidět, že data na první pohled neobsahují žádné známky sezóního chování.</p>
+    <figure>
+        <img src="img/data_preview.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
     <p>Boxplot ukazuje že z hlediska absolutní velikosti hodnoty PM<sub>10</sub> mnoho bodů vybočuje od průměru 14.093698, který má relativně malou standarní odchylku 18.931824. Samozřejmě všechny tyto body nemusí být anomálie, protože naše detekce je časově závislá a záleží na předchozích měřeních.</p>
+    <figure>
+        <img src="img/boxplot.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
     <p>Jistou lineární závislost naznačuje tak zvaný <i>lag plot</i>, který zobrazuje závíslost měření na měřením předchozím, body se totiž shormaždují na diagonále. I zde je vidět zhruba 6 anomálních měření, která leží mimo diagonálu.</p>
+    <figure>
+        <img src="img/lag_plot.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
     <p>Poslední vizualizační pomůckou, kterou prozkoumáváme data je korelační graf. Zajímá nás především korelace příznaku `pm10` s ostaními. Za povšimnutí stojí, že anomálie PM<sub>10</sub> se vyskutují pouze pokud je nízká hladina SO<sub>2</sub> a O<sub>3</sub>.</p>
-
+    <figure>
+        <img src="img/scatter_plot.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
     <p>Každopádně tento vztah zřejmě není lineární, protože korelační koeficient je v obou případech blízký nule (0.028117 resp. -0.067698) v porovnání s největším korelační koeficient, který má s příznakem `pm2p5`, a to 0.530632. Z korelačního grafu PM<sub>10</sub> a PM<sub>2,5</sub> je ale vidět, že nekteré anomáli nastávají jak při zvyšené hladině PM<sub>2,5</sub> tak při jejím normálním stavu.</p>
 
     <h3>Rozdíl časů odečtů</h3>
 
     <p>Podle specifikace je vyčítací frekvence 15 minut z brány do platformy. Naše data takovéto pravidelné intervaly neobsahují. Průměrně je dostupné nové měření asi každých 7 minut a 52 sekund se standarní odchylkou zhruba 18 minut a 20 sekund.</p>
     <p>Zřejmé výpadky ale mohou systém odstavit i na delší dobu. V našich datech je nejdelší prodleva přes 1 den a 15 hodin.</p>
+    <figure>
+        <img src="img/cas_odectu.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h3>Log–log plot</h3>
 
     <p>Poslední vizualizační pomůckou, která nám pomůže nahlédnou do dat z hlediska jejich absolutní velikosti je tzv. log–log graf. Především v jeho pravé dolní části je vidět, že data obsahují něktré abnormálně velké hodnoty a bude úkolem námi naučených klasifikátorů tyto hodnoty najít i vzhledem k časové závislosti na bodech předchozích.</p>
+    <figure>
+        <img src="img/log-log_plot.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h2>Předzpracování</h2>
 
     <p>Původní data tedy nejsou samplovány v rovnoměrných intervalech, a proto je v rámci předzpracování přesamplujeme na každých 15 minut, což je vyčítací frekvence z platformy a k doplnění chybějících hodnot použijeme metodu *fill forward*, která doplní vždy předchozí hodnotu.</p>
-
     <p>Data musí přetransformovat do podoby vhodné pro předpovídání časových řad, abychom potom mohli detekovat anomálie. To znamená že z měření v čase \(t\) se budeme snažit předpovědět hodnotu `pm10` v čase \(t + 1\).</p>
-
     <p>Poté data rozdělíme na trénovací a validační množinu. Validační množina nám poslouží k výběru modelu a jeho hyperparametrů. Konzervativně jsem se rozhodnul, že data rozdělím na půlky tak, aby odhad byl co nejpřesnější.</p>
-
+    <figure>
+        <img src="img/train_validation_split.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
     <p>Nakonec aby různé příznaky byly zhruba stejných rozsahů použijeme standadrní škálování, takže každý příznak má trénovací množiny bude mít nulový průměr a jenotkovou standardní odchylku. Takto předzpracovaná data nám umožní i správnou selekci příznaků pomocí linearní regrese s L1 regularizací.</p>
+    
+    <h2>Selekce příznaků</h2>
+
+    <p>Selekce podmnožiny příznaků může být důležitá například pro snížení komunikační zátěže. Vhodné příznaky pro linearní modely můžeme vybrat napříkad pomocí linearní regrese s L1 regularizací (Lasso). Ta totiž koeficienty u nevhodný příznaků drží blízko nule.</p>
+    <p>Z výše zmíněných důvodů jsem zkusil natrénovat Lasso pro 23 různých hodnot regularizačního parametru na logaritmické škále mezi 10<sup>-10</sup> a 10<sup>1</sup>. Výsledné grafy jasně ukazují, že důležitý je pouze příznak `pm10`, protože ostatní jsou blízké nule, pokud jekvadratická odmocnina ze střední kvadratická odchylka nízká. Pro testované lineární modely stačí tedy uvažovat pouze tento příznak.</p>
+    <figure>
+        <img src="img/feature_selection.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h2>Porovnání modelů</h2>
 
@@ -97,12 +130,20 @@
 
     <p>Druhým modelem je linearní regrese a nyní už bez regularizace, protože nám zůstal pouze jeden příznak. Pokud necháme tento model předpovídat pouze z bezprostředně předcházející hodnoty dostaneme RMSE viz níže.</p>
     <p>Můžeme ale také nechat linearní regresi předpovídat z hodnot větší historie. Graf níže ukazuje výsledek pro velikosti hisotrie 1 až 100. Jako nejlepší se ukazuje velikost historie hodnoty 2, kde je RMSE rovna 0.63797. Následně se RMSE zhorší a poté konverguje k hodnotě zhruba 0,71.</p>
+    <figure>
+        <img src="img/linear_regresion_window.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h3>Long Short-Term Memory (LSTM) rekurentní neuronová síť</h3>
 
     <p>Poslední a nejkomplexnější model je <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">LSTM</a><dt-cite key="hochreiter1997lstm"></dt-cite>, který dokáže zachytit i nelineární vztahy v datech, a proto vstupu tohoto modelu všechny příznaky.</p>
     <p>Jako architekturu jsou zvolil jednovrstvout rekuretní síť s velikostí skrytého stavu 64. Výstupem ale musí být pouze jedno číslo které predikuje měření PM<sub>10</sub>. Proto je na vlastní buňce LSTM ještě linearní vrstva, která produkuje onu jednu výstupní hodnotu.</p>
     <p>Co se týče trénování, LSTM jsem trénoval na sekvencích délky 100 a celkem 50 epoch. Výsledné RMSE na validační setu viz níže.</p>
+    <figure>
+        <img src="img/losses.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h3>Výsledky</h3>
 
@@ -110,7 +151,29 @@
 
     <h2>Detekce anomálií</h2>
 
+    <figure>
+        <img src="img/delta_histogram.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/anomalies.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
+    
     <h2>Testování</h2>
+    
+    <figure>
+        <img src="img/test_data.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/test_delta_histogram.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/test_anomalies.svg">
+        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+    </figure>
 
     <h2>Závěr</h2>
 </dt-article>
@@ -119,14 +182,6 @@
 </dt-appendix>
 
 <script type="text/bibliography">
-  @article{gregor2015draw,
-    title={DRAW: A recurrent neural network for image generation},
-    author={Gregor, Karol and Danihelka, Ivo and Graves, Alex and Rezende, Danilo Jimenez and Wierstra, Daan},
-    journal={arXivreprint arXiv:1502.04623},
-    year={2015},
-    url={https://arxiv.org/pdf/1502.04623.pdf}
-  }
-  
   @article{hochreiter1997lstm,
     author = {Hochreiter, Sepp and Schmidhuber, Jürgen},
     title = {Long Short-Term Memory},
