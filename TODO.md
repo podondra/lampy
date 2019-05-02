@@ -7,8 +7,8 @@
     - rozmyslet zda udělat optimalizace hyperparametrů LSTM
         (random search, viz `optimalizace-hyperparametru.ipynb`, pro zrychlení přesunout na GPU),
     - udělat závěreční odhad střední kvadratické odchylky (RMSE) na testovacích datech,
-- vyvinout verzi, která bude hledat anomálie online pomocí Golemio API,
 - sestavit HTML report (jako GitHub page s distill šablonou),
+- vyvinout verzi, která bude hledat anomálie online pomocí Golemio API,
 - napsat dokumentaci (v podobě docstring u funkcí nebo vygenerovat pomocí Read the Docs).
 
 Možné úkoly, které nesplním: 
