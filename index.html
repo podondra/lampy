@@ -23,29 +23,75 @@
 
     <dt-byline></dt-byline>
 
-    <h2>Explorace</h2>
+    <h2>Explorace data</h2>
+
+    <p>Pražská datová platforma Golemio poskytuje data z pilotního provozu Senzorické sítě veřejného osvětlení, v rámci kterého bylo nainstalováno 92 chytrých pouličních LED lamp v blízkosti Karlínského náměstí na Praze 8. Některé z těchto lamp mají senzory pro měření a sběr dat o hluku, prašnosti a množství dalších polutantů. Výška senzorů je přibližně 4,5 metrů nad zemí.</p>
+    <p><a href="https://cs.wikipedia.org/wiki/Pevn%C3%A9_%C4%8D%C3%A1stice">Pevné částice</a>.</p>
 
     <h3>Datové zdroje</h3>
 
     <p>V <a href="https://golemio.cz/cs/node/622">katalogu datové platformy Golemio</a> jsou k dispozici dva datové CSV soubory: jeden za druhé pololetí roku 2018 a druhý za zatím uplynulou část prvního pololetí roku 2019. Data z druhé poloviny obsahují celkem 473529 záznamů z toho jsou ale dostupné odečty PM<sub>10</sub> pouze v 129807 případech. V soubory z roku 2019 je zatím celkem 226672 záznamů a z toho 62518 měření PM<sub>10</sub>.</p>
     <p>Každý záznam se skládá z následujích atributů:</p>
-    <ul>
-        <li>sid (string): identifikátor stanice;</li>
-        <li>starttimestamp` (datetime): datum a čas měření,</li>
-        <li>o3 (integer with precision): atribut O<sub>3</sub> (ozon, ppb),</li>
-        <li>no2 (integer with precision): atribut NO<sub>2</sub> (oxid dusičitý, ppb),</li>
-        <li>so2 (integer with precision): atribut SO<sub>2</sub> (oxid siřičitý, ppb),</li>
-        <li>pm10 (integer with precision): atribut jemné částice PM<sub>10</sub> (µg m<sup>-3</sup>),</li>
-        <li>pm2p5 (integer with precision): atribut jemné částice PM<sub>2,5</sub> (µg m<sup>-3</sup>),</li>
-        <li>geocoordinates_latitude (integer with precision): zeměpisná šířka stanice,</li>
-        <li>geocoordinates_longitude (integer with precision): zeměpisná délka stanice,</li>
-    </ul>
+
+    <table>
+        <tr>
+            <th>atribut</th>
+            <th>popis</th>
+            <th>jednotka</th>
+        </tr>
+        <tr>
+            <td>sid</td>
+            <td>identifikátor stanice</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>starttimestamp</td>
+            <td>datum a čas měření</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>o3</td>
+            <td>O<sub>3</sub> (ozon)</td>
+            <td>ppb</td>
+        </tr>
+        <tr>
+            <td>no2</td>
+            <td>NO<sub>2</sub> (oxid dusičitý)</td>
+            <td>ppb</td>
+        </tr>
+        <tr>
+            <td>so2</td>
+            <td>SO<sub>2</sub> (oxid siřičitý)</td>
+            <td>ppb</td>
+        </tr>
+        <tr>
+            <td>pm10</td>
+            <td>pevné částice PM<sub>10</sub></td>
+            <td>µg m<sup>-3</sup></td>
+        </tr>
+        <tr>
+            <td>pm2p5</td>
+            <td>pevné částice PM<sub>2,5</sub></td>
+            <td>µg m<sup>-3</sup></td>
+        </tr>
+        <tr>
+            <td>geocoordinates_latitude</td>
+            <td>zeměpisná šířka stanice</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>geocoordinates_longitude</td>
+            <td>zeměpisná délka stanice</td>
+            <td></td>
+        </tr>
+    </table>
+
     <p>kde ppb znamená <a href="https://en.wikipedia.org/wiki/Parts-per_notation">parts per bilion</a>. Datová sada by měla obsahovat odečty z 43 senzorů, které jsou rozmístěny na vybraných lampách, ale ve skutečnosti jsou k dispozici data pouze z 22 senzorů.</p>
-    <p>Ze 22 senzorů měří podle dostupných dat polétavý prach PM<sub>10</sub> pouze 6 senzorů z nich nejvíce měření má stanice s identifikátorem: y7e4onsytkb3ydonflz5kcbcigkh5ulo.</p>
+    <p>Ze 22 senzorů měří podle dostupných dat polétavý prach PM<sub>10</sub> pouze 6 senzorů z nich nejvíce měření má stanice s identifikátorem: <em>y7e4onsytkb3ydonflz5kcbcigkh5ulo</em>.</p>
 
     <h3>Trénovací a testovací data</h3>
 
-    <p>Vezmeme-li si pouze data z této lampy a ponecháme si atributy o3, pm2p5, no2, so2 a pm10, tak dostaneme data dimenze 5, kterí obsahují 32872 záznamů v roce 2018 a 12709 záznamů v roce 2019, a to je dohromady 45581 záznamů za oba roky. Protože pracujeme s časovou řadou jako index zachováme datum a čas měření tedy `starttimestamp`.</p>
+    <p>Vezmeme-li si pouze data z této lampy a ponecháme si atributy o3, pm2p5, no2, so2 a pm10, tak dostaneme data dimenze 5, kterí obsahují 32872 záznamů v roce 2018 a 12709 záznamů v roce 2019, a to je dohromady 45581 záznamů za oba roky. Protože pracujeme s časovou řadou jako index zachováme datum a čas měření tedy <em>starttimestamp</em>.</p>
     <p>Dále se přímo nabízí rozdělit data na trénovací a testovací množinu podle roku měření tj. podle souborů. Takové rozdělení má 72,1% dat v trénovací množině a 27,9% dat v množině testovací.</p>
 
     <h3>Vizualizace</h3>
@@ -65,12 +111,12 @@
         <img src="img/lag_plot.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
     </figure>
-    <p>Poslední vizualizační pomůckou, kterou prozkoumáváme data je korelační graf. Zajímá nás především korelace příznaku `pm10` s ostaními. Za povšimnutí stojí, že anomálie PM<sub>10</sub> se vyskutují pouze pokud je nízká hladina SO<sub>2</sub> a O<sub>3</sub>.</p>
+    <p>Poslední vizualizační pomůckou, kterou prozkoumáváme data je korelační graf. Zajímá nás především korelace příznaku <em>pm10</em> s ostaními. Za povšimnutí stojí, že anomálie PM<sub>10</sub> se vyskutují pouze pokud je nízká hladina SO<sub>2</sub> a O<sub>3</sub>.</p>
     <figure>
         <img src="img/scatter_plot.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
     </figure>
-    <p>Každopádně tento vztah zřejmě není lineární, protože korelační koeficient je v obou případech blízký nule (0.028117 resp. -0.067698) v porovnání s největším korelační koeficient, který má s příznakem `pm2p5`, a to 0.530632. Z korelačního grafu PM<sub>10</sub> a PM<sub>2,5</sub> je ale vidět, že nekteré anomáli nastávají jak při zvyšené hladině PM<sub>2,5</sub> tak při jejím normálním stavu.</p>
+    <p>Každopádně tento vztah zřejmě není lineární, protože korelační koeficient je v obou případech blízký nule (0.028117 resp. -0.067698) v porovnání s největším korelační koeficient, který má s příznakem <em>pm2p5</em>, a to 0.530632. Z korelačního grafu PM<sub>10</sub> a PM<sub>2,5</sub> je ale vidět, že nekteré anomáli nastávají jak při zvyšené hladině PM<sub>2,5</sub> tak při jejím normálním stavu.</p>
 
     <h3>Rozdíl časů odečtů</h3>
 
@@ -92,18 +138,18 @@
     <h2>Předzpracování</h2>
 
     <p>Původní data tedy nejsou samplovány v rovnoměrných intervalech, a proto je v rámci předzpracování přesamplujeme na každých 15 minut, což je vyčítací frekvence z platformy a k doplnění chybějících hodnot použijeme metodu *fill forward*, která doplní vždy předchozí hodnotu.</p>
-    <p>Data musí přetransformovat do podoby vhodné pro předpovídání časových řad, abychom potom mohli detekovat anomálie. To znamená že z měření v čase \(t\) se budeme snažit předpovědět hodnotu `pm10` v čase \(t + 1\).</p>
+    <p>Data musí přetransformovat do podoby vhodné pro předpovídání časových řad, abychom potom mohli detekovat anomálie. To znamená že z měření v čase \(t\) se budeme snažit předpovědět hodnotu <em>pm10</em> v čase \(t + 1\).</p>
     <p>Poté data rozdělíme na trénovací a validační množinu. Validační množina nám poslouží k výběru modelu a jeho hyperparametrů. Konzervativně jsem se rozhodnul, že data rozdělím na půlky tak, aby odhad byl co nejpřesnější.</p>
     <figure>
         <img src="img/train_validation_split.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
     </figure>
     <p>Nakonec aby různé příznaky byly zhruba stejných rozsahů použijeme standadrní škálování, takže každý příznak má trénovací množiny bude mít nulový průměr a jenotkovou standardní odchylku. Takto předzpracovaná data nám umožní i správnou selekci příznaků pomocí linearní regrese s L1 regularizací.</p>
-    
+
     <h2>Selekce příznaků</h2>
 
     <p>Selekce podmnožiny příznaků může být důležitá například pro snížení komunikační zátěže. Vhodné příznaky pro linearní modely můžeme vybrat napříkad pomocí linearní regrese s L1 regularizací (Lasso). Ta totiž koeficienty u nevhodný příznaků drží blízko nule.</p>
-    <p>Z výše zmíněných důvodů jsem zkusil natrénovat Lasso pro 23 různých hodnot regularizačního parametru na logaritmické škále mezi 10<sup>-10</sup> a 10<sup>1</sup>. Výsledné grafy jasně ukazují, že důležitý je pouze příznak `pm10`, protože ostatní jsou blízké nule, pokud jekvadratická odmocnina ze střední kvadratická odchylka nízká. Pro testované lineární modely stačí tedy uvažovat pouze tento příznak.</p>
+    <p>Z výše zmíněných důvodů jsem zkusil natrénovat Lasso pro 23 různých hodnot regularizačního parametru na logaritmické škále mezi 10<sup>-10</sup> a 10<sup>1</sup>. Výsledné grafy jasně ukazují, že důležitý je pouze příznak <em>pm10</em>, protože ostatní jsou blízké nule, pokud jekvadratická odmocnina ze střední kvadratická odchylka nízká. Pro testované lineární modely stačí tedy uvažovat pouze tento příznak.</p>
     <figure>
         <img src="img/feature_selection.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
@@ -111,13 +157,20 @@
 
     <h2>Porovnání modelů</h2>
 
+    <p>Při detekování anomálií v časových řadách se používá metoda, kdy je daná řada předpověděna dopředu (například pomocí rekurentní neuronové sítě) a následně je porovnána se skutečnými daty z nehož jsou určeny anomálie (například pomocí váhování). Tímto přístupem se zabývá článek Time Series Anomaly Detection<dt-cite key="shipmon2017"></dt-cite>. Dalším vhodným materiálem k prostudování je přehled algoritmů na detekci anomálií Anomaly Detection: A Survey<dt-cite key="chandola2009"></dt-cite>.</p>
+    <p>Protože data neobsahují žádná označení dřívějších anomalií, je třeba použít strojové učení bez učitele</p>
     <p>Problém je definovám tak, že předpovíme pomocí nějakého algoritmu strojové učení následují hodnotu, která by měla následovat po jich zaznamenaných měření. Předpovězenou hodnotu potom porovnáme s naměřenou hodnotou a pokud se tyto hodnoty nepřirozeně liší, tak měření označíme jako anomálii.</p>
     <p>Jako vhodné algoritmy jsem zvolil tři základní:</p>
-    <ul>
+
+    <ol>
         <li>základní model, který předpokládá že následující hodnota měření bude stejná jako přechozí,</li>
         <li>lineární regresní model a</li>
         <li>rekurentní neuronovou síť (konkrétně dnes nejpopulárnější Long Short-Term Memory).</li>
-    </ul>
+    </ol>
+
+    <p>Metrika úspěšnosti
+Pro měření úspěšnosti predikce časové řady se jako vhodná zdá střední kvadratická chyba (mean squared error, MSE), kterou model minimalizuje, ale není žádoucí dosáhnout nulové chyby, protože potom by nebylo možné detekovat anomálie. Tzn. model by se měl naučit pouze pravidelnosti v datech a nikoliv se přeučit tak, aby si dokázal zapamatova anomálie.</p>
+    <p>V měření úspěšnosti detekce anomálií je problém absence označení anomálií v datech. Detekce tedy musí být kontrolovány člověkem. Je možné dělat různé statistické odhady úspěšnosti (např. odhad matice záměň), ang. confusion matrix, precision, recall, PR curve nebo F-score).</p>
     <p>Abych mohl modely mezi sebou porovnávat je potřeba zvolit nějakou metriku. Pro regresní problémy je nejpřirozenější odmocnina ze střední kvadratické chyby:</p>
     <p>\(\mathrm{RMSE} = \sqrt{\frac{1}{N} \sum^{N}_{i = 1}(\hat{y_i} - y_i)^2},\)</p>
     <p>kde \(N\) je počet měření, \(\hat{y_i}\) je predikce modelu a \(y_i\) je skutečně naměřená hodnota.</p>
@@ -137,6 +190,7 @@
 
     <h3>Long Short-Term Memory (LSTM) rekurentní neuronová síť</h3>
 
+    <p>Pokročilejší predikční model je LSTM rekurentní neuronová síť. Úvod do rekurentních sítí: <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a>.<p>
     <p>Poslední a nejkomplexnější model je <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">LSTM</a><dt-cite key="hochreiter1997lstm"></dt-cite>, který dokáže zachytit i nelineární vztahy v datech, a proto vstupu tohoto modelu všechny příznaky.</p>
     <p>Jako architekturu jsou zvolil jednovrstvout rekuretní síť s velikostí skrytého stavu 64. Výstupem ale musí být pouze jedno číslo které predikuje měření PM<sub>10</sub>. Proto je na vlastní buňce LSTM ještě linearní vrstva, která produkuje onu jednu výstupní hodnotu.</p>
     <p>Co se týče trénování, LSTM jsem trénoval na sekvencích délky 100 a celkem 50 epoch. Výsledné RMSE na validační setu viz níže.</p>
@@ -159,9 +213,9 @@
         <img src="img/anomalies.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
     </figure>
-    
+
     <h2>Testování</h2>
-    
+
     <figure>
         <img src="img/test_data.svg">
         <figcaption><strong>TODO:</strong> TODO.</figcaption>
@@ -199,5 +253,34 @@
     acmid = {1246450},
     publisher = {MIT Press},
     address = {Cambridge, MA, USA},
+  }
+
+  @misc{shipmon2017,
+    author = {Dominique T. Shipmon and Jason M. Gurevitch and Paolo M. Piselli and Stephen T. Edwards},
+    title = {Time Series Anomaly Detection},
+    year = {2017},
+    eprint = {arXiv:1708.03665},
+    url= {https://arxiv.org/abs/1708.03665}
+  }
+
+  @article{chandola2009,
+    author = {Chandola, Varun and Banerjee, Arindam and Kumar, Vipin},
+    title = {Anomaly Detection: A Survey},
+    journal = {ACM Comput. Surv.},
+    issue_date = {July 2009},
+    volume = {41},
+    number = {3},
+    month = jul,
+    year = {2009},
+    issn = {0360-0300},
+    pages = {15:1--15:58},
+    articleno = {15},
+    numpages = {58},
+    url = {http://doi.acm.org/10.1145/1541880.1541882},
+    doi = {10.1145/1541880.1541882},
+    acmid = {1541882},
+    publisher = {ACM},
+    address = {New York, NY, USA},
+    keywords = {Anomaly detection, outlier detection},
   }
 </script>
