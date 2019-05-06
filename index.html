@@ -24,13 +24,23 @@
     </h2>
     <dt-byline></dt-byline>
 
-    <p>Úvod, motivace a abstrakt.</p>
-    <p>Dalším vhodným materiálem k prostudování je přehled algoritmů na detekci anomálií Anomaly Detection: A Survey<dt-cite key="chandola2009"></dt-cite>.</p>
+    <p>Otevřená data přináší velký prostor pro aplikaci metod strojového učení a pro zlepšení kvality života nebo přírodního prostředí.
+    Tato práce se zabývá detekcí anomálií<dt-cite key="chandola2009"></dt-cite> v datech o polétavém prachu z chytrých lamp,
+    které jsou poskytovány hlavním městem Praha jako otevřená data.</p>
     <p><a href="https://cs.wikipedia.org/wiki/Pevn%C3%A9_%C4%8D%C3%A1stice">Pevné částice</a> (nebo polétavý prach, anglicky <em>particulate matter</em>, PM) jsou tuhé nebo kapalné částice v ovzduší o velikosti v rozsahu 1 nm až 100 µm.
     Data použitá v tomto projektu obsahují PM<sub>10</sub> (částice menší než 10 µm)
     a PM<sub>2,5</sub> (částice menší než 2,5 µm).
     PM<sub>2,5</sub> je tedy podmnožina měření PM<sub>10</sub>,
     a proto budu hledat anomálie pouze v PM<sub>10</sub>.</p>
+    <p>V této práci chci prozkoumat přístup k měření pomocí predikce časové řady následovanou prahovnáním.
+    Chci, aby se zvolený model naučil pravidelnosti v datech
+    a pokud se stane něco neočekávaného,
+    tak to pomocí prahování dokáži odhalit.
+    Jako algoritmy strojového učení jsem vyzkoušel lineární regresi a LSTM rekurentní neuronovou síť.
+    Ukázalo se, že lineární regrese pro tento problém postačuje,
+    protože je schopna časovou řadu koncentrace PM<sub>10</sub> nejlépe předpovídat.</p>
+    <p>Tato zpráva je rozdělena do několika částí,
+    které se postupně zabývají explorací dat, předzpracovním, metrikami, selekcí příznaků, porovnáním modelů a testováním výsledného algoritmu.</p>
 
     <h2>Explorace data</h2>
     <p><a href="https://golemio.cz/">Pražská datová platforma Golemio</a> poskytuje data z pilotního provozu <a href="https://golemio.cz/cs/node/622">Senzorické sítě veřejného osvětlení</a>, v rámci kterého bylo nainstalováno 92 chytrých pouličních LED lamp v blízkosti Karlínského náměstí na Praze 8.
@@ -455,6 +465,15 @@
     </figure>
 
     <h2>Závěr</h2>
+    <p>V této práci jsem se zabýval detekcí anomálií v otevřených datech z chytrých lamp o polétavém prachu PM<sub>10</sub>.
+    Jako nejlepší se ukázalo předpovídat časovou řadu pomocí lineární regrese (LSTM bylo horší),
+    která na vstup dostane dvě poslední měření.
+    Následně jsem předpověděnou hodnotu porovnal se skutečnou.
+    Posledním krokem je prahování,
+    které určí zda hodnoto je z hlediska modelu normální nebo ne.</p>
+    <p>Na testovacích datech se ukázalo,
+    že tento postup je schopen detekovat většinu anomálií
+    a také bere v úvahu momentální trendy v datech pokud trvají delší dobu a nestanou se náhlé změny.</p>
 
 </dt-article>
 
