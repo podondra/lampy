@@ -42,7 +42,7 @@
     Data z roku 2018 obsahují celkem 473529 záznamů.
     Z toho jsou dostupné odečty PM<sub>10</sub> pouze v 129807 případech.
     V souboru za roku 2019 je celkem 226672 záznamů a z toho 62518 měření PM<sub>10</sub>.</p>
-    <p>Každý záznam se skládá z následujích atributů:</p>
+    <p>Každý záznam se skládá z následujících atributů:</p>
 
     <table>
         <tr>
@@ -112,14 +112,14 @@
     To je dohromady 45581 záznamů za oba roky.
     V této práci pracuji s časovou řadou,
     a proto zachovám jako index datum a čas měření (atribut <em>starttimestamp</em>).</p>
-    <p>Pro potřebu verifikace natrénovaného module se nabízí rozdělit data na trénovací a testovací množinu podle roku měření.
+    <p>Pro potřebu verifikace natrénovaného modelu se nabízí rozdělit data na trénovací a testovací množinu podle roku měření.
     Takové rozdělení má 72,1% záznamů v trénovací množině a 27,9% záznamů v množině testovací.</p>
 
     <h3>Vizualizace</h3>
     <p>V následující části jsem se zaměřil na porozumění datům o znečištění ovzduší skrz vizualizace.
     Vizualizace nezpracovaných časových řad jednotlivých atributů ukazuje,
     že se v datech zřejmě anomálie vyskytují.
-    Stačí pouze data vhodně předzpravocat
+    Stačí pouze data vhodně předzpracovat
     a vybrat algoritmy strojového učení,
     které dokážou anomálie nejlépe detekovat.
     Dále je vidět,
@@ -132,41 +132,41 @@
 
     <p>Rozložení absolutních velikostí PM<sub>10</sub> odhaluje boxplot.
     Mnoho bodů se nachází nad 3. kvartilem.
-    Průměr příznaku je 14,093698 s relativně malou standarní odchylkou hodnoty 18,931824.
+    Průměr příznaku je 14,093698 s relativně malou standardní odchylkou hodnoty 18,931824.
     Samozřejmě všechny tyto body nemusí být anomálie,
     protože mnou navržená detekce záleží na předchozích měřeních
     a ne pouze na absolutní velikosti.</p>
 
     <figure>
         <img src="img/boxplot.svg">
-	<figcaption><strong>Boxplot atributu PM<sub>10</sub>:</strong> Většina hodnot se drží blízko mediánu, ale spoutu měření se nachází svou velikostí nad 3. kvartilem.</figcaption>
+	<figcaption><strong>Boxplot atributu PM<sub>10</sub>:</strong> Většina hodnot se drží blízko mediánu, ale spoustu měření se nachází svou velikostí nad 3. kvartilem.</figcaption>
     </figure>
 
     <p>Lineární tvar <a href="https://www.statisticshowto.datasciencecentral.com/lag-plot/">lag grafu</a> ukazuje,
     že vhodnou metodou pro predikci časové řady bude nějaký <a href="https://cs.wikipedia.org/wiki/%C4%8Casov%C3%A1_%C5%99ada#Autoregresn%C3%AD_modely_(AR)">autoregresní model</a>
-    (hodnotu předpovídá na základě několika přechozích pozorování).
+    (hodnotu předpovídá na základě několika předchozích pozorování).
     Graf odhaluje zhruba 6 anomálních měření,
     které leží mimo diagonálu.</p>
 
     <figure>
         <img src="img/lag_plot.svg">
-        <figcaption><strong>Lag graf:</strong> Závislost měření na měření přechdozím naznačuje, že bude stačit lineární model. Dále lze pozorovat zhruba 9 odlehlých hodnot.</figcaption>
+        <figcaption><strong>Lag graf:</strong> Závislost měření na měření předchdozím naznačuje, že bude stačit lineární model. Dále lze pozorovat zhruba 9 odlehlých hodnot.</figcaption>
     </figure>
 
-    <p>Pokud se v datech nacházejí linearní závislosti je důležité je odhalit,
-    protože následně stačí použít jednoduchých linearních modelů
+    <p>Pokud se v datech nacházejí lineární závislosti je důležité je odhalit,
+    protože následně stačí použít jednoduchých lineárních modelů
     a je možné dosáhnout vysoké efektivnosti i přesnosti.</p>
 
     <p>Lineární závislosti mezi atributy odhaluje korelační diagram (anglicky <em>scatter plot</em>).
     Protože hledám anomálie v PM<sub>10</sub>,
-    tak mě zajímá korelace příznaku <em>pm10</em> s ostaními.
+    tak mě zajímá korelace příznaku <em>pm10</em> s ostatními.
     Za povšimnutí stojí,
-    že anomálie v PM<sub>10</sub> se vyskutují pouze,
+    že anomálie v PM<sub>10</sub> se vyskytují pouze,
     pokud je nízká hladina SO<sub>2</sub> a O<sub>3</sub>.</p>
 
     <figure>
         <img src="img/scatter_plot.svg">
-	<figcaption><strong>Korelační diagram:</strong> Závislost PM<sub>10</sub> na ostaních příznacích v datech.</figcaption>
+	<figcaption><strong>Korelační diagram:</strong> Závislost PM<sub>10</sub> na ostatních příznacích v datech.</figcaption>
     </figure>
 
     <p>Každopádně tento vztah zřejmě není lineární,
@@ -198,31 +198,31 @@
 
     <p>Přesto je z korelačního grafu PM<sub>10</sub> a PM<sub>2,5</sub> vidět,
     že některé anomálie nastávají,
-    jak při zvyšené hladině PM<sub>2,5</sub>,
+    jak při zvýšené hladině PM<sub>2,5</sub>,
     tak při jejím normálním stavu.</p>
 
     <h3>Intervaly měření</h3>
     <p>Podle specifikace je vyčítací frekvence 15 minut z brány do platformy.
     Data ze souborů pravidelné intervaly neobsahují.
-    Průměrně je dostupné nové měření asi každých 7 minut a 52 sekund se standarní odchylkou 18 minut a 20 sekund. Výpadky ale mohou systém odstavit i na delší dobu.
+    Průměrně je dostupné nové měření asi každých 7 minut a 52 sekund se standardní odchylkou 18 minut a 20 sekund. Výpadky ale mohou systém odstavit i na delší dobu.
     V našich datech je nejdelší prodleva přes 1 den a 15 hodin.
     Následují graf ukazuje histogram intervalů měření.</p>
 
     <figure>
         <img src="img/cas_odectu.svg">
-        <figcaption><strong>Histogram intervalů měření:</strong> Intervaly měření jsou většinou pod 1000 sekund (histogram zobrazuje pouze intervaly ve dvou standartních odchylkách).</figcaption>
+        <figcaption><strong>Histogram intervalů měření:</strong> Intervaly měření jsou většinou pod 1000 sekund (histogram zobrazuje pouze intervaly ve dvou standardních odchylkách).</figcaption>
     </figure>
 
     <h3>Log–log plot</h3>
     <p>Poslední vizualizační pomůckou,
     která je vhodná pro hledání anomálií z hlediska jejich absolutní velikosti je log–log graf.
     Především v jeho pravé dolní části je vidět,
-    že data obsahují něktré abnormálně velké hodnoty
+    že data obsahují některé abnormálně velké hodnoty
     a bude úkolem námi naučených klasifikátorů tyto hodnoty najít i vzhledem k časové závislosti na bodech předchozích.</p>
 
     <figure>
         <img src="img/log-log_plot.svg">
-        <figcaption><strong>Log–log plot:</strong> Pravá dolní čás odhaluje několi měření s vysokými hodnotami.</figcaption>
+        <figcaption><strong>Log–log plot:</strong> Pravá dolní část odhaluje několik měření s vysokými hodnotami.</figcaption>
     </figure>
 
     <h2>Předzpracování dat</h2>
@@ -246,22 +246,22 @@
         <figcaption><strong>Trénovací a validační množina:</strong> Rozdělení dat z roku 2018 na trénovací a valiční množinu, kde každá obsahuje půlku dat.</figcaption>
     </figure>
 
-    <p>Nakonec použiji standadrní škálování,
+    <p>Nakonec použiji standardní škálování,
     aby různé příznaky byly zhruba stejných rozsahů.
-    Každý příznak trénovací množiny bude mít nulový průměr a jenotkovou standardní odchylku.
+    Každý příznak trénovací množiny bude mít nulový průměr a jednotkovou standardní odchylku.
     Takto předzpracovaná data umožní správnou selekci příznaků pomocí linearní regrese s L1 regularizací,
     kterou se zabývám v další části.</p>
 
     <h2>Metrika úspěšnosti</h2>
-    <p>Pro měření úspěšnosti predikce časové řady je vhodná odmocnicna střední kvadratické chyby (anglicky <em>root mean squared error</em> neboli RMSE),
+    <p>Pro měření úspěšnosti predikce časové řady je vhodná odmocnina střední kvadratické chyby (anglicky <em>root mean squared error</em> neboli RMSE),
     kterou zvolený model minimalizuje,
     ale není žádoucí dosáhnout nulové chyby,
     protože potom by nebylo možné detekovat anomálie.
-    RMSE je definována takto:</p>
-    <p style="text-align: center">\(\mathrm{RMSE} = \sqrt{\frac{1}{N} \sum^{N}_{i = 1}(\hat{y_i} - y_i)^2},\)</p>
-    <p>kde \(N\) je počet měření, \(\hat{y_i}\) je predikce modelu a \(y_i\) je skutečně naměřená hodnota.
+    RMSE je definována takto:
+    \[\mathrm{RMSE} = \sqrt{\frac{1}{N} \sum^{N}_{i = 1}(\hat{y_i} - y_i)^2},\]
+    kde \(N\) je počet měření, \(\hat{y_i}\) je predikce modelu a \(y_i\) je skutečně naměřená hodnota.
     Chci aby se model naučil pouze pravidelnosti v datech
-    a nikoliv se přeučit, aby si dokázal zapamatova anomálie.</p>
+    a nikoliv se přeučit, aby si dokázal zapamatovat anomálie.</p>
     <p>V měření úspěšnosti detekce anomálií je problém absence označení anomálií v datech.
     Detekce tedy musí být kontrolovány člověkem (nejlépe doménovým expertem).</p>
 
@@ -269,7 +269,7 @@
     <h2>Selekce příznaků</h2>
     <p>Selekce podmnožiny příznaků může být přínosná pro snížení komunikační zátěže při online monitorování,
     kdy není potřeba skrz API dotazovat všechny příznaky.
-    Vhodné příznaky pro linearní modely můžeme vybrat linearní regrese s L1 regularizací (tzv. lasso).
+    Vhodné příznaky pro lineární modely můžeme vybrat lineární regrese s L1 regularizací (tzv. lasso).
     L1 regularizace totiž koeficienty u nevhodných příznaků drží blízko nule.</p>
     <p>Z výše zmíněných důvodů jsem zkusil natrénovat lasso pro 23 různých hodnot regularizačního parametru <var>alpha</var> na logaritmické škále mezi 10<sup>-10</sup> a 10<sup>1</sup>.
     Výsledné grafy níže ukazují, že důležitý je pouze příznak <em>pm10</em>.
@@ -279,7 +279,7 @@
 
     <figure>
         <img src="img/feature_selection.svg">
-	<figcaption><strong>Selekce příznaků pomocí lasso:</strong> Vrchní graf ukazuje hodnotu RMSE pro lasso s regularizačním parameterm <var>alpha</var> na vodorovné ose. Spodní graf potom ukazuje hodnoty koeficientů pro dané příznaky. Je zřejmé, že pokud je model úspěšní (RMSE je nizké), potom stačí pouze příznak <em>pm10</em>.</figcaption>
+	<figcaption><strong>Selekce příznaků pomocí lasso:</strong> Vrchní graf ukazuje hodnotu RMSE pro lasso s regularizačním parametrem <var>alpha</var> na vodorovné ose. Spodní graf potom ukazuje hodnoty koeficientů pro dané příznaky. Je zřejmé, že pokud je model úspěšní (RMSE je nizké), potom stačí pouze příznak <em>pm10</em>.</figcaption>
     </figure>
 
     <h2>Porovnání modelů</h2>
@@ -289,7 +289,7 @@
     kdy je daná řada modelem předpověděna dopředu (například pomocí rekurentní neuronové sítě)
     a následně je porovnána se skutečným měření.
     Z tohoto porovnání jsou určeny anomálie (například pomocí prahování a dalších pravidel).</p>
-    <p>Jako vhodné modeli jsem zvolil následující tři:</p>
+    <p>Jako vhodné modely jsem zvolil následující tři:</p>
 
     <ol>
         <li>základní model (anglicky <em>baseline</em>),</li>
@@ -302,13 +302,13 @@
     ke kterému budeme moci vztahovat výsledky ostatních modelů.
     Navíc je jednoduchý na implementaci a dosahuje relativně dobrého RMSE: 0,6492.</p>
 
-    <h3>Linearní regrese</h3>
-    <p>Druhým modelem je linearní regrese bez regularizace,
+    <h3>Lineární regrese</h3>
+    <p>Druhým modelem je lineární regrese bez regularizace,
     protože selekce příznaků ukázala,
     že stačí příznak <em>pm10</em>.
     Pokud tento model předpovídá pouze z bezprostředně předcházející hodnoty,
     jeho úspěšnost v RMSE je 0,6402.</p>
-    <p>Lepší je nechat linearní regresi předpovídat z více předcházejících měření.
+    <p>Lepší je nechat lineární regresi předpovídat z více předcházejících měření.
     Graf níže ukazuje výsledek pro velikosti okna předcházejících měření velikosti 1 až 100.
     Jako nejlepší se ukazuje velikost okna velikosti 2,
     kde je RMSE rovna 0,6380.
@@ -320,47 +320,142 @@
         <figcaption><strong>RMSE v závislosti na velikosti okna:</strong> Nejlepší je velikost okna 2. Při větší hodnotě je RMSE výrazně větší.</figcaption>
     </figure>
 
-    <h3>Long Short-Term Memory (LSTM) rekurentní neuronová síť</h3>
-    <p>Pokročilejší predikční model je LSTM rekurentní neuronová síť. Úvod do rekurentních sítí: <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a>.<p>
-    <p>Poslední a nejkomplexnější model je <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">LSTM</a><dt-cite key="hochreiter1997lstm"></dt-cite>, který dokáže zachytit i nelineární vztahy v datech, a proto vstupu tohoto modelu všechny příznaky.</p>
-    <p>Jako architekturu jsou zvolil jednovrstvout rekuretní síť s velikostí skrytého stavu 64. Výstupem ale musí být pouze jedno číslo které predikuje měření PM<sub>10</sub>. Proto je na vlastní buňce LSTM ještě linearní vrstva, která produkuje onu jednu výstupní hodnotu.</p>
-    <p>Co se týče trénování, LSTM jsem trénoval na sekvencích délky 100 a celkem 50 epoch. Výsledné RMSE na validační setu viz níže.</p>
+    <h3>Long Short-Term Memory (LSTM)</h3>
+    <p>Nejpokročilejším prediktivním modelem,
+    který na data použiji,
+    je rekurentní neuronová síť,
+    a to konkrétně architektura <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">LSTM</a><dt-cite key="hochreiter1997lstm"></dt-cite>.
+    Rekurentní sítě se ukázaly být velice efektivní i v aproximování nelineárních vztahů v datech,
+    proto nyní zachovám všech pět příznaků jako vstup rekurentní sítě.
+    To ukazuje blog <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a>.<p>
+    <p>Konkrétní architekturu jsem zvolil jednovrstvou LSTM s dimenzí skrytého vektoru 64.
+    Výstupem LSTM musí být pouze jedno číslo,
+    které predikuje měření PM<sub>10</sub>,
+    a proto je na vlastní buňce LSTM ještě lineární vrstva,
+    která produkuje predikci PM<sub>10</sub> v následujícím čase.</p>
+    <p>Tuto LSTM jsem trénoval pomocí MSE ztrátové funkce:
+    \[\mathrm{MSE} = \frac{1}{N} \sum^{N}_{i = 1}(\hat{y_i} - y_i)^2,\]
+    kde \(N\) je počet měření, \(\hat{y_i}\) je predikce modelu a \(y_i\) je skutečně naměřená hodnota,
+    na vstupních sekvencích délky 100 po celkem 50 epoch.
+    Hodnoty ztátové funkce na trénovacím a validačním setu ukazuje graf níže.
+    Velký rozdíl mezi trénovací a validační ztrátovou funkcí nemusí v tomto regresním problému představovat přeučení,
+    protože ve validačním setu je jedna velká anomálie,
+    která může hodnotu ztrátové funkce výrazně zhoršit.
+    Výsledné RMSE na validační setu je 1,0588.</p>
+
     <figure>
         <img src="img/losses.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+	<figcaption><strong>Trénink LSTM:</strong> LSTM byla trénována pomocí optimalizátoru Adam<dt-cite key="adam"></dt-cite> po 50 epoch.</figcaption>
     </figure>
 
     <h3>Výsledky</h3>
+    <p>Následující tabulka srovnává zvolené predikční modely z hlediska metriky RMSE měřené na validačním setu:</p>
 
-    <p>Níže jsou porovnány RMSE všech čtyř různých přístupů k předpovědi časové řady na validačním setu a jako nejlepší možnost se tedy jeví lineární regrese.</p>
+    <table>
+    <tr>
+        <th>model</th>
+        <th>validační RMSE</th>
+    </tr>
+    <tr>
+        <td>lineární regrese s oknem 2</td>
+        <td style="text-align: right">0.6379</td>
+    </tr>
+    <tr>
+        <td>lineární regrese</td>
+        <td style="text-align: right">0.6401</td>
+    </tr>
+    <tr>
+        <td>základní model</td>
+        <td style="text-align: right">0.6492</td>
+    </tr>
+    <tr>
+        <td>LSTM</td>
+        <td style="text-align: right">1.0587</td>
+    </tr>
+    </table>
+
+    <p>Nejlepších výsledků dosahuje lineární regresní model,
+    který má na vstupu dvě měření z historie,
+    a proto tento model použijeme pro detekci anomálií.</p>
 
     <h2>Detekce anomálií</h2>
+    <p>Nyní po výběru vhodného prediktivního modelu mohu detekovat anomálie postupem stejným jako v článku Time Series Anomaly Detection<dt-cite key="shipmon2017"></dt-cite>.
+    Postup je následující:</p>
+
+    <ol>
+        <li>lineární regresní model s oknem 2 predikuje další měření PM<sub>10</sub>,</li>
+        <li>predikovanou hodnotu porovnám se skutečně naměřenou hodnotou (vypočítám rozdíl v absolutní hodnotě, \(\mid\hat{y}- y\mid\)),</li>
+        <li>pomocí prahování určím, zda se jedná o anomálii.</li>
+    </ol>
+
+    <p>Histogram absolutní hodnoty rozdílu predikce \(\hat{y}\) a skutečné hodnoty \(y\) je na obrázku níže.
+    Většina hodnot je malé velikosti,
+    protože pochází z předvídatelné distribuce,
+    kterou dokáže lineární regrese zachytit.</p>
 
     <figure>
         <img src="img/delta_histogram.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+        <figcaption><strong>Histogram rozdílu predikcí a skutečných hodnot:</strong> Většina rozdílů je malé velikosti, protože jsou normální a lineární model je dokáže predikovat. Zbytek budou zřejmě anomálie, které chci detekovat.</figcaption>
     </figure>
+
+    <p>Teď bych potřeboval doménového experta, 
+    který by dokázal určit,
+    které rozdíly jsou abnormální a které přirozené.
+    Takový expert ale není k dispozici,
+    a tak zvolím jako hodnotu pro pahování hodnotu okraje prvního binu z histogramu výše: 3,9617.</p>
+    <p>Takto zvolený práh odhalil ve validačních datech celkem 9 anomálií,
+    které jsou zobrazeny v obrázku níže.</p>
+
     <figure>
         <img src="img/anomalies.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+        <figcaption><strong>Anomálie ve validačním setu:</strong> Navržený algoritmus odhalil celkem 9 anomálií ve validačních datech.</figcaption>
     </figure>
 
     <h2>Testování</h2>
+    <p>Postup pro detekci anomálii je vyvinutý
+    a stačí jej otestovat na testovacích datech.
+    Jak ukazuje graf níže,
+    jsou tyto data daleko složitější a obsahují zřejmě daleko více anomálií.
+    Pro trénování jsem použil všechna data z roku 2018,
+    která předzpracuji stejně jako v předchozích pokusech
+    a následně aplikuji postup popsaný v předchozí části.</p>
 
     <figure>
         <img src="img/test_data.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+        <figcaption><strong>Testovací data:</strong> V testovací množině jsou data za rok 2019. Na první pohled jsou tyto data daleko komplikovanější než data z roku 2018 a obsahují zřejmě daleko větší množství anomálií.</figcaption>
     </figure>
+
+    <p>Podle histogramu níže můj algoritmus opravdu správně detekoval daleko více anomálií než ve validačním setu (pro testovací množinu je hodnota prahu: 6,8293).</p>
+
     <figure>
         <img src="img/test_delta_histogram.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+        <figcaption><strong>Histogram pro prahování testovacích dat:</strong> V porovnání se stejným histogramem na validačních datech je vidět, že budu detekovat o mnoho více anomálií.</figcaption>
     </figure>
+
+    <p>Pomocí stanoveného prahu jsem detekoval celkem 113 anomálií,
+    které jsou zobrazené na grafu níže.
+    Veškeré abnormálně vysoké špičky byly detekovány správně.
+    Také je vidět,
+    že některé špičky detekovány nebyly,
+    to může být tím, že nárůst je tak pozvolný
+    a za tak dlouhý časový okamžik,
+    že se vlastně o anomálii nejedná,
+    ale je to předpovídatelné chování.</p>
+
+    <figure>
+        <img src="img/test_all_anomalies.svg">
+        <figcaption><strong>Anomálie v testovacích datech:</strong> Všech 113 detekovaných anomálií v testovacích datech zobrazených jako červené body.</figcaption>
+    </figure>
+
+    <p>Obrázek níže zobrazuje 9 náhodně vybraných anomálií z celkem 113 detekovaných.</p>
+
     <figure>
         <img src="img/test_anomalies.svg">
-        <figcaption><strong>TODO:</strong> TODO.</figcaption>
+        <figcaption><strong>Vzorek anomálií:</strong> Náhodný výběr 9 z celkem 113 detekovaných anomálií v testovacích.</figcaption>
     </figure>
 
     <h2>Závěr</h2>
+
 </dt-article>
 
 <dt-appendix>
@@ -413,5 +508,13 @@
     publisher = {ACM},
     address = {New York, NY, USA},
     keywords = {Anomaly detection, outlier detection},
+  }
+
+  @inproceedings{adam,
+    author = {Diederik P. Kingma and Jimmy Ba},
+    title = {Adam: A Method for Stochastic Optimization},
+    booktitle = {3rd International Conference on Learning Representations, ICLR 2015, San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings},
+    year = {2015},
+    url = {https://arxiv.org/abs/1412.6980}
   }
 </script>
