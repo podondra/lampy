@@ -31,7 +31,8 @@ class Detector:
         self.threshold = bins[1]
 
     def transform_data(self, raw_data, sid, window):
-        df_data = raw_data.loc[sid].set_index('starttimestamp')['pm10'].sort_index()
+        df_data = raw_data.loc[sid].set_index('starttimestamp')['pm10']\
+                .sort_index()
         resampled_data = data.resample_data(df_data, period='15T')
         X = resampled_data.values[:-1].reshape(-1, 1)
         y = resampled_data.values[1:].reshape(-1, 1)
