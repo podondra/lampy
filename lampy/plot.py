@@ -6,7 +6,9 @@ def plot_delta_hist(y_delta):
     """Plot histogram of differences between true measurement
     and prediction."""
     ax = plt.axes()
+    # plot histogram of differences
     ax.hist(y_delta)
+    # set log scale
     ax.set_yscale('log')
     ax.set_ylabel('počet')
     ax.set_xlabel('$\mid\hat{y} - y\mid$')

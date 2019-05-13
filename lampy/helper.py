@@ -13,7 +13,9 @@ def setup_session(config_file):
     cfg = parse_config(config_file)
     # setup session
     session = Session()
+    # get access token
     access_token = get_access_token(cfg)
+    # setup authorization
     session.auth = partial(token_auth, token=access_token)
     return session
 

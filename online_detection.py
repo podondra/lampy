@@ -36,17 +36,23 @@ def monitor_anomalies(sid, delay, config):
     detector = Detector()
     # get initial mesurement
     measurement = get_pm10_measurement(sid, session, API_URL)
+    # create vector of previous measurements for prediction
     measurements = [measurement, measurement]
 
+    # start anomaly detection
     while True:
+        # get current value
         current_measurement = get_pm10_measurement(sid, session)
+        # check anomaly
         is_anomaly, pred = detector.detect(measurements, current_measurement)
         if is_anomaly:
             click.echo('ANOMALY!', end=' ')
         click.echo('[' + str(datetime.datetime.now()) + '] predicted: {:.2f} true: {:.2f}'.format(pred, current_measurement))
-        time.sleep(delay)
+        # update vectory of previous measurements
         measurements[0] = measurements[1]
         measurements[1] = current_measurement
+        # wait for next detection
+        time.sleep(delay)
 
 
 if __name__ == '__main__':

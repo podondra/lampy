@@ -13,8 +13,11 @@ class LSTM(nn.Module):
         and `num_layers` of hidden layers."""
         super(LSTM, self).__init__()
         self.hidden_size = hidden_size
+        # initialize LSTM model
         self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
                             num_layers=num_layers, batch_first=True)
+        # initialize linear model that takes hidden vector
+        # and transforms it to output
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x, hidden):
@@ -30,6 +33,7 @@ class LSTM(nn.Module):
     def predict(self, X):
         """Predict for each value in sequence `X`."""
         tensor = self.to_tensor(X)
+        # turn off gradients
         with torch.no_grad():
             y_pred, _ = self.forward(tensor, hidden=None)
         return y_pred.numpy()
@@ -38,15 +42,18 @@ class LSTM(nn.Module):
         """Train this LSTM with `X` and `y` with validation data `X_val`
         and `y_val` for `n_epochs` epochs on sequences of length `seq_len`.
         Loss function is MSE loss and optimize is Adam"""
+        # create dataset and loader of data
         dataset = TensorDataset(self.to_tensor(X), self.to_tensor(y))
         loader = DataLoader(dataset, batch_size=seq_len, shuffle=False)
         X_val, y_val = self.to_tensor(X_val), self.to_tensor(y_val)
 
+        # loss function is MSE loss
         criterion = nn.MSELoss(reduction='sum')
+        # optimizer is Adam with default parameter setting
         optimizer = optim.Adam(self.parameters())
 
-        tr_losses = []
-        val_losses = []
+        # list for keeping training history
+        tr_losses, val_losses = [], = []
         for epoch in range(1, n_epochs + 1):
             hidden = None
             tr_loss = 0
