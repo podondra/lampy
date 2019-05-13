@@ -8,6 +8,7 @@ from requests_oauthlib import OAuth2Session
 
 
 def setup_session(config_file):
+    """Setup session so that it can be used for data retrieval."""
     # parse config
     cfg = parse_config(config_file)
     # setup session
@@ -27,22 +28,27 @@ def parse_config(path):
 
 
 def get_client_id(cfg):
+    """Get client ID from config."""
     return get_from_cfg(cfg, what='client_id', err_code=1)
 
 
 def get_client_secret(cfg):
+    """Get client secret from config."""
     return get_from_cfg(cfg, what='client_secret', err_code=2)
 
 
 def get_username_with_domain(cfg):
+    """Get username with domain from config."""
     return get_from_cfg(cfg, what='username_with_domain', err_code=3)
 
 
 def get_password(cfg):
+    """Get password with domain from config."""
     return get_from_cfg(cfg, what='password', err_code=4)
 
 
 def get_from_cfg(cfg, what, err_code):
+    """Get `what` from config or exit on error."""
     try:
         value = cfg['golemio'][what]
     except KeyError:
@@ -52,6 +58,7 @@ def get_from_cfg(cfg, what, err_code):
 
 
 def get_access_token(cfg):
+    """Get access token for the Golemio API."""
     # implemented according the following documentation:
     # https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#legacy-application-flow
     client_id = get_client_id(cfg)

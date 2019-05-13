@@ -7,12 +7,18 @@ from lampy import helper
 from lampy.detector import Detector
 
 
-def get_pm10_measurement(sid, session,
-                         url='https://ckc-emea.cisco.com/t/prague-city.com/cdp/v1/devices'):
+API_URL = 'https://ckc-emea.cisco.com/t/prague-city.com/cdp/v1/devices'
+
+
+def get_pm10_measurement(sid, session, url):
+    """Query API for current value on PM10 of lamp with `sid` identifier."""
     # prepare request
     body = {'Query': {'Find': {'EnvironmentData': {'sid': {'eq': sid}}}}}
+    # execute request
     response = session.post(url, json=body)
+    # convert it to json
     json = response.json()
+    # extrat the PM10 value
     return json['Find']['Result'][0]['EnvironmentData']['airQuality']['reading']['pm10']['value']
 
 
@@ -24,9 +30,12 @@ def get_pm10_measurement(sid, session,
 @click.argument('sid')
 def monitor_anomalies(sid, delay, config):
     """Online detection of anomalies of lamp with identifier SID."""
+    # prepare session for API querying
     session = helper.setup_session(config)
+    # create detector of anomalies
     detector = Detector()
-    measurement = get_pm10_measurement(sid, session)
+    # get initial mesurement
+    measurement = get_pm10_measurement(sid, session, API_URL)
     measurements = [measurement, measurement]
 
     while True:
