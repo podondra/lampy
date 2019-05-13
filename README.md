@@ -32,7 +32,7 @@ Následně lze zobrazit nápověda:
 
 Monitoring se zapíní pomocí například:
 
-	$ python online_monitoring.py nec4q4darktyq3dq6izwwhfyyhum4r44
+	$ python online_detection.py nec4q4darktyq3dq6izwwhfyyhum4r44
 
 ## Reference
 
