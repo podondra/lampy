@@ -42,7 +42,7 @@ def monitor_anomalies(sid, delay, config):
     # start anomaly detection
     while True:
         # get current value
-        current_measurement = get_pm10_measurement(sid, session)
+        current_measurement = get_pm10_measurement(sid, session, API_URL)
         # check anomaly
         is_anomaly, pred = detector.detect(measurements, current_measurement)
         if is_anomaly:
