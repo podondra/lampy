@@ -18,7 +18,7 @@ Pro více informací viz soubor `data/README.md`.
 
 ## Online monitoring
 
-Online monitoring je implementován ve skriptu `online_monitoring.py`,
+Online monitoring je implementován ve skriptu `online_detection.py`,
 který se spouší po vytvoření virtuálního prostředí, například:
 
 	$ python3 -m venv venv
@@ -28,7 +28,7 @@ který se spouší po vytvoření virtuálního prostředí, například:
 
 Následně lze zobrazit nápověda:
 
-	$ python online_monitoring.py --help
+	$ python online_detection.py --help
 
 Monitoring se zapíní pomocí například:
 
