@@ -7,16 +7,31 @@ from requests import Session
 from requests_oauthlib import OAuth2Session
 
 
+TOKEN_URL = 'https://ckc-emea.cisco.com/corev4/token'
+
+
+def token_updater(token):
+    return
+
+
 def setup_session(config_file):
     """Setup session so that it can be used for data retrieval."""
     # parse config
     cfg = parse_config(config_file)
-    # setup session
-    session = Session()
     # get access token
-    access_token = get_access_token(cfg)
+    token = get_token(cfg)
     # setup authorization
-    session.auth = partial(token_auth, token=access_token)
+    client_id = get_client_id(cfg)
+    client_secret = get_client_secret(cfg)
+    extra = {
+        'client_secret': client_secret,
+        'client_id': client_id
+    }
+    session = OAuth2Session(client_id,
+                            token=token,
+                            auto_refresh_kwargs=extra,
+                            auto_refresh_url=TOKEN_URL,
+                            token_updater=token_updater)
     return session
 
 
@@ -59,7 +74,7 @@ def get_from_cfg(cfg, what, err_code):
     return value
 
 
-def get_access_token(cfg):
+def get_token(cfg):
     """Get access token for the Golemio API."""
     # implemented according the following documentation:
     # https://requests-oauthlib.readthedocs.io/en/latest/oauth2_workflow.html#legacy-application-flow
@@ -70,13 +85,13 @@ def get_access_token(cfg):
 
     oauth = OAuth2Session(client=LegacyApplicationClient(client_id=client_id))
     token = oauth.fetch_token(
-            token_url='https://ckc-emea.cisco.com/corev4/token',
+            token_url=TOKEN_URL,
             username=username_with_domain,
             password=password,
             client_id=client_id,
             client_secret=client_secret
             )
-    return token['access_token']
+    return token
 
 
 def token_auth(req, token):

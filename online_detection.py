@@ -2,6 +2,7 @@ import datetime
 import time
 
 import click
+import requests
 
 from lampy import helper
 from lampy.detector import Detector
@@ -16,8 +17,13 @@ def get_pm10_measurement(sid, session, url):
     body = {'Query': {'Find': {'EnvironmentData': {'sid': {'eq': sid}}}}}
     # execute request
     response = session.post(url, json=body)
-    # convert it to json
-    json = response.json()
+    try:
+        # check response
+        response.raise_for_status()
+        # convert it to json
+        json = response.json()
+    except requests.exceptions.RequestException as e:
+        click.echo(e, err=True)
     # extrat the PM10 value
     return json['Find']['Result'][0]['EnvironmentData']['airQuality']['reading']['pm10']['value']
 
