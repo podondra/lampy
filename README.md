@@ -16,6 +16,12 @@ Výstupem projektu jsou následující body:
 Tento projekt využívá otevřená data hlavního města Prahy.
 Pro více informací viz soubor `data/README.md`.
 
+## Přístup k API
+
+Pro online monitoring je získat [přístupové údaje](https://golemio.docs.apiary.io/#introduction/api-dokumentace)
+ke stahování dat z API a následně sestavit soubor `config.cfg`
+po vzoru `config.cfg.sample`.
+
 ## Online monitoring
 
 Online monitoring je implementován ve skriptu `online_detection.py`,
